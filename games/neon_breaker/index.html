@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Brick Breaker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Game Header -->
+        <header class="game-header">
+            <div class="score-display">
+                <div class="score-item">
+                    <span class="label">SCORE</span>
+                    <span class="value" id="score">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">LEVEL</span>
+                    <span class="value" id="level">1</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">LIVES</span>
+                    <div class="lives-container" id="lives">
+                        <div class="life active"></div>
+                        <div class="life active"></div>
+                        <div class="life active"></div>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <span class="label">HIGH SCORE</span>
+                    <span class="value" id="highScore">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Canvas -->
+        <div class="canvas-container">
+            <canvas id="gameCanvas" width="1200" height="900"></canvas>
+            
+            <!-- Game Overlays -->
+            <div class="game-overlay" id="startScreen">
+                <div class="overlay-content">
+                    <h1 class="game-title">NEON BREAKER</h1>
+                    <p class="game-subtitle">Break the blocks, collect power-ups, survive!</p>
+                    <button class="neon-button" id="startButton">START GAME</button>
+                    <button class="neon-button secondary" id="leaderboardButton">LEADERBOARD</button>
+                </div>
+            </div>
+
+            <div class="game-overlay hidden" id="pauseScreen">
+                <div class="overlay-content">
+                    <h2 class="overlay-title">PAUSED</h2>
+                    <button class="neon-button" id="resumeButton">RESUME</button>
+                    <button class="neon-button secondary" id="mainMenuButton">MAIN MENU</button>
+                </div>
+            </div>
+
+            <div class="game-overlay hidden" id="gameOverScreen">
+                <div class="overlay-content">
+                    <h2 class="overlay-title">GAME OVER</h2>
+                    <p class="final-score">Final Score: <span id="finalScore">0</span></p>
+                    <button class="neon-button" id="restartButton">PLAY AGAIN</button>
+                    <button class="neon-button secondary" id="menuButton">MAIN MENU</button>
+                </div>
+            </div>
+
+            <div class="game-overlay hidden" id="levelCompleteScreen">
+                <div class="overlay-content">
+                    <h2 class="overlay-title">LEVEL COMPLETE!</h2>
+                    <p class="level-bonus">Bonus: <span id="levelBonus">0</span></p>
+                    <button class="neon-button" id="nextLevelButton">NEXT LEVEL</button>
+                </div>
+            </div>
+
+            <div class="game-overlay hidden" id="leaderboardScreen">
+                <div class="overlay-content">
+                    <h2 class="overlay-title">LEADERBOARD</h2>
+                    <div class="leaderboard-list" id="leaderboardList">
+                        <!-- Leaderboard entries will be populated by JavaScript -->
+                    </div>
+                    <button class="neon-button secondary" id="backButton">BACK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Controls Info -->
+        <div class="controls-info">
+            <div class="control-item">
+                <span class="key">←→</span>
+                <span class="description">Move Paddle</span>
+            </div>
+            <div class="control-item">
+                <span class="key">SPACE</span>
+                <span class="description">Launch Ball / Pause</span>
+            </div>
+            <div class="control-item">
+                <span class="key">MOUSE</span>
+                <span class="description">Move Paddle</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Particle Container -->
+    <div id="particles"></div>
+
+    <!-- Audio Elements (placeholder - add actual audio files to /audio directory) -->
+    <audio id="paddleHitSound" preload="none">
+        <!-- <source src="audio/paddle-hit.mp3" type="audio/mpeg"> -->
+    </audio>
+    <audio id="brickBreakSound" preload="none">
+        <!-- <source src="audio/brick-break.mp3" type="audio/mpeg"> -->
+    </audio>
+    <audio id="wallBounceSound" preload="none">
+        <!-- <source src="audio/wall-bounce.mp3" type="audio/mpeg"> -->
+    </audio>
+    <audio id="powerUpSound" preload="none">
+        <!-- <source src="audio/powerup-collect.mp3" type="audio/mpeg"> -->
+    </audio>
+    <audio id="laserSound" preload="none">
+        <!-- <source src="audio/laser-shoot.mp3" type="audio/mpeg"> -->
+    </audio>
+    <audio id="explosionSound" preload="none">
+        <!-- <source src="audio/explosion.mp3" type="audio/mpeg"> -->
+    </audio>
+    <audio id="gameOverSound" preload="none">
+        <!-- <source src="audio/game-over.mp3" type="audio/mpeg"> -->
+    </audio>
+    <audio id="levelCompleteSound" preload="none">
+        <!-- <source src="audio/level-complete.mp3" type="audio/mpeg"> -->
+    </audio>
+    <audio id="backgroundMusic" preload="none" loop>
+        <!-- <source src="audio/background-music.mp3" type="audio/mpeg"> -->
+    </audio>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/particle.js"></script>
+    <script src="js/powerup.js"></script>
+    <script src="js/brick.js"></script>
+    <script src="js/ball.js"></script>
+    <script src="js/paddle.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
