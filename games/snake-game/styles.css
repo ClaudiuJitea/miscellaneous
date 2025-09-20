@@ -1,0 +1,405 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', monospace;
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+    color: #00ff88;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Game Container */
+.game-container {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 
+        0 0 50px rgba(0, 255, 136, 0.3),
+        inset 0 0 50px rgba(0, 255, 136, 0.1);
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    backdrop-filter: blur(10px);
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Game Header */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.game-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #00ff88;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+    letter-spacing: 3px;
+}
+
+.score-display {
+    display: flex;
+    gap: 30px;
+}
+
+.score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.score-item .label {
+    font-size: 0.8rem;
+    color: rgba(0, 255, 136, 0.7);
+    margin-bottom: 5px;
+    font-weight: 400;
+}
+
+.score-item .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+}
+
+/* Canvas Container */
+.canvas-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#gameCanvas {
+    background: linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
+    border: 3px solid #00ff88;
+    border-radius: 10px;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 136, 0.5),
+        inset 0 0 30px rgba(0, 255, 136, 0.1);
+}
+
+/* Game Overlays */
+.game-overlay, .start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.overlay-content, .start-content {
+    text-align: center;
+    color: #00ff88;
+}
+
+.overlay-content h2, .start-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+}
+
+.overlay-content p, .controls-info p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: rgba(0, 255, 136, 0.8);
+}
+
+.final-score {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 15px;
+    color: #ff6b6b;
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+}
+
+.controls-info {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 8px;
+    background: rgba(0, 255, 136, 0.05);
+}
+
+.start-button {
+    background: linear-gradient(45deg, #00ff88, #00cc6a);
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.start-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 25px rgba(0, 255, 136, 0.7);
+}
+
+.start-button:active {
+    transform: translateY(0);
+}
+
+/* Controls Panel */
+.controls-panel {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.control-key {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    border: 1px solid rgba(0, 255, 136, 0.4);
+}
+
+.control-desc {
+    font-size: 0.8rem;
+    color: rgba(0, 255, 136, 0.7);
+}
+
+/* Stats Panel */
+.stats-panel {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: rgba(0, 255, 136, 0.7);
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #00ff88;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
+    50% { box-shadow: 0 0 50px rgba(0, 255, 136, 0.8); }
+    100% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
+}
+
+.score-item .value {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+#gameCanvas {
+    animation: glow 3s infinite ease-in-out;
+}
+
+/* Hidden Elements */
+.game-overlay.hidden, .start-screen.hidden {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .score-display {
+        gap: 20px;
+    }
+    
+    .score-item .value {
+        font-size: 1.4rem;
+    }
+    
+    #gameCanvas {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .controls-panel, .stats-panel {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .control-group, .stat-item {
+        flex-direction: row;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: 15px;
+    }
+    
+    .game-title {
+        font-size: 1.5rem;
+    }
+    
+    #gameCanvas {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .overlay-content h2, .start-content h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Special Effects */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #00ff88;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particle-float 1s ease-out forwards;
+    box-shadow: 0 0 6px #00ff88;
+}
+
+@keyframes particle-float {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0);
+    }
+}
+
+/* Food pulsing animation */
+@keyframes food-pulse {
+    0% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.1); filter: brightness(1.3); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Snake head breathing animation */
+@keyframes snake-breath {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Screen shake animation for game over */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Score increment animation */
+@keyframes score-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); color: #ff6b6b; }
+    100% { transform: scale(1); }
+}
+
+.score-pop {
+    animation: score-pop 0.3s ease-out;
+}
+
+/* Button hover effects */
+.start-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.start-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.start-button:hover::before {
+    left: 100%;
+}
+
+/* Canvas border glow intensity */
+.canvas-glow-intense {
+    box-shadow: 
+        0 0 40px rgba(0, 255, 136, 0.8),
+        inset 0 0 40px rgba(0, 255, 136, 0.2) !important;
+}
+
+/* Level up flash effect */
+@keyframes level-up-flash {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(0, 255, 136, 0.3); }
+}
+
+.level-up-flash {
+    animation: level-up-flash 0.5s ease-in-out 3;
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleek Snake Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Game Header -->
+        <header class="game-header">
+            <h1 class="game-title">SNAKE</h1>
+            <div class="score-display">
+                <div class="score-item">
+                    <span class="label">SCORE</span>
+                    <span class="value" id="current-score">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">HIGH</span>
+                    <span class="value" id="high-score">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Canvas Container -->
+        <div class="canvas-container">
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            
+            <!-- Game Overlay -->
+            <div class="game-overlay" id="gameOverlay">
+                <div class="overlay-content">
+                    <h2 id="overlayTitle">GAME OVER</h2>
+                    <p id="overlayMessage">Press SPACE to restart</p>
+                    <div class="final-score">
+                        <span>Final Score: </span>
+                        <span id="finalScore">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Start Screen -->
+            <div class="start-screen" id="startScreen">
+                <div class="start-content">
+                    <h2>WELCOME TO SNAKE</h2>
+                    <div class="controls-info">
+                        <p>Use arrow keys or WASD to move</p>
+                        <p>Eat food to grow and increase score</p>
+                        <p>Don't hit walls or yourself!</p>
+                    </div>
+                    <button class="start-button" id="startButton">START GAME</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Controls Info -->
+        <div class="controls-panel">
+            <div class="control-group">
+                <span class="control-key">↑ ↓ ← →</span>
+                <span class="control-desc">Move Snake</span>
+            </div>
+            <div class="control-group">
+                <span class="control-key">SPACE</span>
+                <span class="control-desc">Pause/Resume</span>
+            </div>
+            <div class="control-group">
+                <span class="control-key">R</span>
+                <span class="control-desc">Restart</span>
+            </div>
+        </div>
+
+        <!-- Game Stats -->
+        <div class="stats-panel">
+            <div class="stat-item">
+                <span class="stat-label">Length:</span>
+                <span class="stat-value" id="snakeLength">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Speed:</span>
+                <span class="stat-value" id="gameSpeed">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Level:</span>
+                <span class="stat-value" id="gameLevel">1</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="eatSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+D2rm4gCjiC0/DOfzQLKHjM7t2OPQgdapvr6aZUEwtdqOnvsGMbBjaB0/LNeSsFJXjJ7d4/CRhm"
+              type="audio/wav">
+    </audio>
+    <audio id="gameOverSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+D2rm4gCjiC0/DOfzQLKHjM7t2OPQgdapvr6aZUEwtdqOnvsGMbBjaB0/LNeSsFJXjJ7d4/CRhm"
+              type="audio/wav">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
