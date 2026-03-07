@@ -96,7 +96,29 @@ show_cmd_output() {
   if $USE_GUM; then
     "$GUM_BIN" pager <"$tmp"
   else
-    whiptail --title "$TITLE" --scrolltext --textbox "$tmp" 30 115
+    whiptail --title "$TITLE" --scrolltext --textbox "$tmp" 24 100
+  fi
+
+  rm -f "$tmp"
+}
+
+run_action() {
+  local action_label="$1"
+  shift
+
+  local tmp
+  tmp=$(mktemp)
+
+  if "$@" >"$tmp" 2>&1; then
+    local out
+    out=$(sed '/^[[:space:]]*$/d' "$tmp" | head -n 8)
+    if [[ -n "$out" ]]; then
+      msg "$action_label completed.\n\n$out"
+    else
+      msg "$action_label completed."
+    fi
+  else
+    show_cmd_output cat "$tmp"
   fi
 
   rm -f "$tmp"
@@ -135,7 +157,7 @@ show_dashboard() {
     "$GUM_BIN" style --border rounded --padding "1 2" --foreground 86 --border-foreground 63 "Dashboard"
     "$GUM_BIN" pager <"$tmp"
   else
-    whiptail --title "$TITLE - Dashboard" --scrolltext --textbox "$tmp" 30 115
+    whiptail --title "$TITLE - Dashboard" --scrolltext --textbox "$tmp" 24 100
   fi
 
   rm -f "$tmp"
@@ -150,9 +172,7 @@ choose_from_lines_single() {
   [[ ${#lines[@]} -eq 0 ]] && return 1
 
   if $USE_GUM; then
-    local selected
-    selected=$(printf '%s\n' "${lines[@]}" | "$GUM_BIN" filter --height 20 --prompt "> " --placeholder "$header") || return 1
-    printf '%s\n' "$selected"
+    printf '%s\n' "${lines[@]}" | "$GUM_BIN" choose --height 20 --header "$header"
   else
     local opts=()
     local line key desc
@@ -192,6 +212,15 @@ container_lines() {
     args=(-a "${args[@]}")
   fi
   docker ps "${args[@]}" | awk -F'|' '{printf "%s|%s | %s | %s\n", $1,$2,$3,$4}'
+}
+
+stopped_container_lines() {
+  docker ps -a \
+    --filter status=created \
+    --filter status=exited \
+    --filter status=dead \
+    --format '{{.ID}}|{{.Names}}|{{.Status}}|{{.Image}}' |
+    awk -F'|' '{printf "%s|%s | %s | %s\n", $1,$2,$3,$4}'
 }
 
 image_lines() {
@@ -271,20 +300,45 @@ container_menu() {
       "List running") show_cmd_output docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}\t{{.Ports}}' ;;
       "List all") show_cmd_output docker ps -a --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}\t{{.Ports}}' ;;
       "Start container"|"Stop container"|"Restart container"|"View logs"|"Inspect container")
-        mapfile -t lines < <(container_lines true)
+        case "$action" in
+          "Start container") mapfile -t lines < <(stopped_container_lines) ;;
+          "Stop container"|"Restart container"|"View logs") mapfile -t lines < <(container_lines false) ;;
+          *) mapfile -t lines < <(container_lines true) ;;
+        esac
         if [[ ${#lines[@]} -eq 0 ]]; then
-          msg "No containers found."
+          case "$action" in
+            "Stop container"|"Restart container"|"View logs") msg "No running containers found." ;;
+            "Start container") msg "No stopped containers found." ;;
+            *) msg "No containers found." ;;
+          esac
           continue
         fi
 
         local selected id
-        selected=$(choose_from_lines_single "Search and select a container" "${lines[@]}") || continue
+        local picked raw_ids
+
+        if [[ "$action" == "Stop container" ]]; then
+          picked=$(choose_from_lines_multi "Select running container(s) to stop (Space to mark, Enter to confirm)" "${lines[@]}") || continue
+          [[ -z "$picked" ]] && continue
+          mapfile -t raw_ids < <(extract_ids_from_multi "$picked")
+          [[ ${#raw_ids[@]} -eq 0 ]] && continue
+          if confirm "Stop ${#raw_ids[@]} running container(s)?"; then
+            run_action "Container stopped" docker stop "${raw_ids[@]}"
+          fi
+          continue
+        fi
+
+        case "$action" in
+          "Start container") selected=$(choose_from_lines_single "Select a stopped/exited container to start" "${lines[@]}") || continue ;;
+          "Restart container") selected=$(choose_from_lines_single "Select a running container to restart" "${lines[@]}") || continue ;;
+          "View logs") selected=$(choose_from_lines_single "Select a running container to view logs" "${lines[@]}") || continue ;;
+          *) selected=$(choose_from_lines_single "Search and select a container" "${lines[@]}") || continue ;;
+        esac
         id=$(extract_id_from_line "$selected")
 
         case "$action" in
-          "Start container") show_cmd_output docker start "$id" ;;
-          "Stop container") show_cmd_output docker stop "$id" ;;
-          "Restart container") show_cmd_output docker restart "$id" ;;
+          "Start container") run_action "Container started" docker start "$id" ;;
+          "Restart container") run_action "Container restarted" docker restart "$id" ;;
           "Inspect container") show_cmd_output docker inspect "$id" ;;
           "View logs")
             local n
@@ -309,7 +363,7 @@ container_menu() {
         [[ ${#raw_ids[@]} -eq 0 ]] && continue
 
         if confirm "Delete ${#raw_ids[@]} container(s)? This cannot be undone."; then
-          show_cmd_output docker rm "${raw_ids[@]}"
+          run_action "Container delete" docker rm "${raw_ids[@]}"
         fi
         ;;
       "Back") break ;;
